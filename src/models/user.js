@@ -9,6 +9,7 @@ class User {
     this.surname = data.surname;
     this.email = data.email;
     this.password = data.password;
+    this.color = data.color;
   }
 
   async save() {
@@ -16,11 +17,12 @@ class User {
       throw new ValidationError("Missing name or surname");
     }
     const res = await knex
-      .returning(["name", "surname", "email", "id"])
+      .returning(["name", "surname", "email", "id", "color"])
       .insert({
         name: this.name,
         surname: this.surname,
         email: this.email,
+        color: this.color,
         password: this.password
       })
       .into("users");
@@ -38,46 +40,25 @@ class User {
     return user;
   }
 
-  static async getTeamsById(id) {
-    if (isNaN(id) || id < 0) {
-      throw new ValidationError("Invalid user ID");
-    }
-    const teams = await knex("teams")
-      .select()
-      .where("user_id", id);
-    return teams;
-  }
-
-  static async getGardensById(id) {
-    if (isNaN(id) || id < 0) {
-      throw new ValidationError("Invalid user ID");
-    }
-    let team_ids = await knex("teammates")
-      .select("team_id")
-      .where("user_id", id);
-    team_ids = team_ids.map(team => team.team_id);
-    let [gardens, teams] = await Promise.all([
-      knex("gardens")
-        .select()
-        .whereIn("team_id", team_ids),
-      knex("teams")
-        .select()
-        .whereIn("id", team_ids)
-    ]);
-    gardens = gardens.map(garden => {
-      garden.team = teams.find(team => team.id === garden.team_id);
-      delete garden.team_id;
-      return garden;
-    });
-    return gardens;
-  }
-
   static async getByEmail(email) {
     const user = await knex("users")
       .select()
       .where("email", email)
       .first();
     return user;
+  }
+
+  static async update(id, data) {
+    if (isNaN(id) || id < 0) {
+      throw new ValidationError("Invalid user ID");
+    }
+    let update = {
+      last_daily: data.last_daily
+    }
+    const user = await knex("users")
+      .where("id", id)
+      .update(update, ["id", "team_id", "longitude", "latitude", "created_at", "updated_at"]);
+    return user[0];
   }
 }
 

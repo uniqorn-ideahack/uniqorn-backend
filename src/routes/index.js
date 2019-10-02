@@ -12,20 +12,28 @@ router.use(function(req, res, next) {
 });
 
 router.use(require("./auth"));
+router.use(require("./traits"));
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV !== "production") {
   router.use(function(req, res, next) {
+    console.log("answer")
     if (res.result) {
       logger.info("Aswering request", null, {
         result: res.result,
         reqId: httpCotext.get("reqId")
       });
       res.status(200).json(res.result);
+    } else {
+      console.log("answer")
+      res.status(200).json({ message: "OK" });
     }
-    next();
   });
   // Development error handler will pass stacktrace
   router.use(function(err, req, res, next) {
+    logger.info("Failed request", null, {
+      result: err,
+      reqId: httpCotext.get("reqId")
+    });
     res.status(err.httpCode || 500);
     res.json({ error: { ...err, message: err.message, stack: err.stack } });
   });
@@ -35,10 +43,15 @@ if (process.env.NODE_ENV === "development") {
     if (res.result) {
       logger.info("Aswering request", null, { reqId: httpCotext.get("reqId") });
       res.status(200).json(res.result);
+    } else {
+      res.status(200).json({ message: "OK" });
     }
-    next();
   });
   router.use(function(err, req, res, next) {
+    logger.info("Failed request", null, {
+      result: err,
+      reqId: httpCotext.get("reqId")
+    });
     res.status(err.httpCode || 500);
     res.json({
       error: err.message

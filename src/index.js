@@ -3,8 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const routes = require('./routes');
-const passport = require('./lib/passport');
+const routes = require("./routes");
+const passport = require("./lib/passport");
 const uuid = require("uuid");
 const httpContext = require("express-http-context");
 
@@ -15,10 +15,8 @@ app.use(function(req, res, next) {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "POST, GET, OPTIONS, DELETE"
-  );
+  res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+  res.header("Access-Control-Allow-Credentials", true);
   next();
 });
 

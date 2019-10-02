@@ -9,6 +9,8 @@ exports.up = async knex => {
           .notNull()
           .unique()
           .index();
+      t.enu('color', ['blue', 'red', 'yellow', 'green']);
+      t.timestamp('last_daily');
       t.string("password").notNull();
       t.boolean("verified")
           .notNull()

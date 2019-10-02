@@ -17,6 +17,7 @@ router.post("/auth/register", async (req, res, next) => {
     name: req.body.name,
     surname: req.body.surname,
     email: req.body.email,
+    color: req.body.color,
     password: createHash(req.body.password)
   };
   try {

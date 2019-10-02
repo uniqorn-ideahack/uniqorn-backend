@@ -1,5 +1,6 @@
 const passport = require("../passport");
 const TokenError = require("../../errors/tokenError")
+const logger = require('../../logger')
 
 module.exports = function(req, res, next) {
   passport.authenticate("jwt", function(err, user, info) {
@@ -7,6 +8,7 @@ module.exports = function(req, res, next) {
       return next(err);
     }
     if (info) {
+      logger.info(info)
       return next(new TokenError("Invalid Token", info));
     }
     // just to be sure... if authentication fails, info should already be defined => at this point user should be defined
@@ -17,7 +19,7 @@ module.exports = function(req, res, next) {
         message: "Failed to authenticate"
       });
     }
-    res.locals.user = { ...user._doc };
+    res.locals.user = { ...user };
     next();
   })(req, res, next);
 };
