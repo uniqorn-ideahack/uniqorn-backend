@@ -12,25 +12,13 @@ const loggerConfig = {
   ),
   transports: [
     new transports.File({ filename: "logs/error.log", level: "error" }),
-    new transports.File({ filename: "logs/combined.log" })
+    new transports.File({ filename: "logs/combined.log" }),
+    new transports.Console({ format: format.simple(), level: "debug" })
   ],
-  exceptionHandlers: [new transports.File({ filename: "logs/error.log" })]
+  exceptionHandlers: [
+    new transports.File({ filename: "logs/error.log" }),
+    new transports.Console({ format: format.simple(), level: "debug" })
+  ]
 };
-
-// Unless in production log to the console
-if (process.env.NODE_ENV !== "production") {
-  loggerConfig.transports.push(
-    new transports.Console({
-      format: format.simple(),
-      level: "debug"
-    })
-  );
-  loggerConfig.exceptionHandlers.push(
-    new transports.Console({
-      format: format.simple(),
-      level: "debug"
-    })
-  );
-}
 
 module.exports = createLogger(loggerConfig);
