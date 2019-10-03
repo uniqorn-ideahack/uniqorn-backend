@@ -23,6 +23,7 @@ router.post("/traits", secure, async (req, res, next) => {
         new Trait({ user_id: res.locals.user.id, text: trait }).save()
       )
     );
+    res.result = {message: "OK"}
   } catch (error) {
     logger.error(error);
     next(error);

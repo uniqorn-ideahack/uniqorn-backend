@@ -37,7 +37,8 @@ class Buddy {
   static async getByUser(id) {
     const buddies = await knex("buddies")
       .select()
-      .where("user_one", id);
+      .where("user_one", id)
+      .orWhere("user_two", id);
     return buddies;
   }
 }
