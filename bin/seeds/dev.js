@@ -25,6 +25,17 @@ exports.seed = async function(knex) {
         password: "$2a$11$YAgktWey7mDy02n2SFOlP.x0wEqBFR5mFdsgjwO7mXsfg2zWWnbg6"
       }
     ]);
+  await knex("buddies")
+    .insert([
+      {
+        user_one: users[0],
+        user_two: users[1]
+      },
+      {
+        user_one: users[1],
+        user_two: users[2]
+      }
+    ])
   const challenges = await knex("challenges")
     .returning("id")
     .insert([
