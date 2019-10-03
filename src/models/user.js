@@ -62,7 +62,7 @@ class User {
     return user[0];
   }
 
-  static async addPoints(id, points) {
+  static async finishedChallenge(userId, challengeId) {
     if (isNaN(id) || id < 0) {
       throw new ValidationError("Invalid user ID");
     }
@@ -72,6 +72,12 @@ class User {
       .increment("points", points);
     console.log("added... ", user);
     return user[0];
+  }
+
+  static async getAll() {
+    const users = await knex("users")
+      .select(["id", "name", "surname", "points"]);
+    return users;
   }
 }
 

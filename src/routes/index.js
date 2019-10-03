@@ -14,7 +14,8 @@ router.use(function(req, res, next) {
 router.use(require("./auth"));
 router.use(require("./traits"));
 router.use(require("./dailychallenges"));
-router.use(require("./bot"));
+router.use(require("./buddy"));
+router.use(require("./user"));
 
 if (process.env.NODE_ENV !== "production") {
   router.use(function(req, res, next) {
@@ -24,9 +25,8 @@ if (process.env.NODE_ENV !== "production") {
         reqId: httpCotext.get("reqId")
       });
       res.status(200).json(res.result);
-    } else {
-      res.status(200).json({ message: "OK" });
     }
+    next()
   });
   // Development error handler will pass stacktrace
   router.use(function(err, req, res, next) {
@@ -43,9 +43,8 @@ if (process.env.NODE_ENV !== "production") {
     if (res.result) {
       logger.info("Aswering request", null, { reqId: httpCotext.get("reqId") });
       res.status(200).json(res.result);
-    } else {
-      res.status(200).json({ message: "OK" });
     }
+    next()
   });
   router.use(function(err, req, res, next) {
     logger.info("Failed request", null, {

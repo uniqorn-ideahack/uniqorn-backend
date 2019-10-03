@@ -20,11 +20,7 @@ router.post("/dailychallenges/:id", secure, async (req, res, next) => {
         message: "Daily challenge not found"
       });
     }
-    console.log(challengeId);
-    let points = await Challenge.getById(challengeId[0]).then(ch => ch.points);
-    console.log(`points ${points}`);
-    let user = await User.addPoints(res.locals.user.id, points);
-    console.log(`user `, user);
+    let user = await User.finshedChallenge(res.locals.user.id, challengeId);
     res.result = user;
   } catch (error) {
     logger.error(error);
