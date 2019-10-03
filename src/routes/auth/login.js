@@ -45,7 +45,7 @@ router.post("/auth/login", async (req, res, next) => {
     }
     let updateUser = User.update(user.id, {last_login: new Date()})
     const options = {
-      expiresIn: "1h"
+      expiresIn: "3h"
     };
     const payload = {
       sub: user.id,
