@@ -17,7 +17,10 @@ router.get("/dailyChallenges", secure, async (req, res, next) => {
     if (dailyChallenges && dailyChallenges.length > 0) {
       res.result = await Promise.all(
         dailyChallenges.map(ch => {
-          return Challenge.getById(ch.challenge_id);
+          return Challenge.getById(ch.challenge_id).then(challenge => {
+            challenge.id = ch.id;
+            return challenge;
+          });
         })
       );
       return next();
@@ -35,18 +38,21 @@ router.get("/dailyChallenges", secure, async (req, res, next) => {
     }
     // load new ones
     let newChalleges = await Challenge.get(3);
-    let toDo = [];
+    let dailyIDs = [];
     for (let challenge of newChalleges) {
-      toDo.push(
+      dailyIDs.push(
         new DailyChallenge({
           user_id: res.locals.user.id,
           challenge_id: challenge.id
         }).save()
       );
     }
-    toDo.push(User.update(res.locals.user.id, { last_daily: now }));
-    await Promise.all(toDo);
-    res.result = newChalleges;
+    const IDs = await Promise.all(dailyIDs);
+    await User.update(res.locals.user.id, { last_daily: now });
+    res.result = newChalleges.map((ch, i) => {
+      ch.id = IDs[i].id
+      return ch;
+    });
     next();
   } catch (error) {
     logger.error(error);

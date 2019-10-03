@@ -40,8 +40,8 @@ class DailyChallenge {
     }
     const challenge_id = await knex("daily_challenges")
       .where("id", id)
-      .del()
-      .returning("challenge_id");
+      .returning("challenge_id")
+      .del();
     return challenge_id;
   }
 

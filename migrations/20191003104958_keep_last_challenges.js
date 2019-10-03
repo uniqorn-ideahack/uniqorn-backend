@@ -1,5 +1,5 @@
 exports.up = async function(knex) {
-  await knex.table("users", t => {
+  await knex.schema.alterTable("users", t => {
     t.integer("last_completed_challenge_id")
       .unsigned()
       .index();
@@ -12,7 +12,7 @@ exports.up = async function(knex) {
 };
 
 exports.down = async function(knex) {
-  await knex.table("users", t => {
+  await knex.schema.alterTable("users", t => {
     t.dropColumn('last_completed_challenge_id');
     t.dropColumn('last_completed_challenge_time');
   });

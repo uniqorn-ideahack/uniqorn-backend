@@ -13,6 +13,7 @@ router.post("/dailychallenges/:id", secure, async (req, res, next) => {
   });
   try {
     let challengeId = await DailyChallenge.deleteById(req.params.id);
+    console.log(`Id ${req.params.id} got`, challengeId)
     if (!challengeId[0]) {
       // no daily challenge with this id found
       return next({
@@ -20,7 +21,7 @@ router.post("/dailychallenges/:id", secure, async (req, res, next) => {
         message: "Daily challenge not found"
       });
     }
-    let user = await User.finshedChallenge(res.locals.user.id, challengeId);
+    let user = await User.finishChallenge(res.locals.user.id, challengeId[0]);
     res.result = user;
   } catch (error) {
     logger.error(error);

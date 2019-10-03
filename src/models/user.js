@@ -2,6 +2,7 @@ const knex = require("knex")(
   require("../../knexfile")[process.env.NODE_ENV || "development"]
 );
 const ValidationError = require("../errors/validationError");
+const Challenge = require('./challenge')
 
 class User {
   constructor(data) {
@@ -62,13 +63,16 @@ class User {
     return user[0];
   }
 
-  static async finishedChallenge(userId, challengeId) {
-    if (isNaN(id) || id < 0) {
+  static async finishChallenge(userId, challengeId) {
+    if (isNaN(userId) || userId < 0) {
       throw new ValidationError("Invalid user ID");
     }
+    const challenge = await Challenge.getById(challengeId)
+    const points = challenge.points
     const user = await knex("users")
-      .returning(["name", "surname", "points"])
-      .where("id", id)
+      .returning(["name", "surname", "points", "last_completed_challenge_id", "last_completed_challenge_time"])
+      .where("id", userId)
+      .update({last_completed_challenge_id: challengeId, last_completed_challenge_time: new Date()})
       .increment("points", points);
     console.log("added... ", user);
     return user[0];
