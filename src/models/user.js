@@ -53,11 +53,24 @@ class User {
       throw new ValidationError("Invalid user ID");
     }
     let update = {
-      last_daily: data.last_daily
-    }
+      last_daily: data.last_daily,
+      last_login: data.last_login
+    };
     const user = await knex("users")
       .where("id", id)
-      .update(update, ["id", "team_id", "longitude", "latitude", "created_at", "updated_at"]);
+      .update(update, ["id", "last_daily", "created_at", "updated_at"]);
+    return user[0];
+  }
+
+  static async addPoints(id, points) {
+    if (isNaN(id) || id < 0) {
+      throw new ValidationError("Invalid user ID");
+    }
+    const user = await knex("users")
+      .returning(["name", "surname", "points"])
+      .where("id", id)
+      .increment("points", points);
+    console.log("added... ", user);
     return user[0];
   }
 }

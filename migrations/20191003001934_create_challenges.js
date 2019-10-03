@@ -25,7 +25,7 @@ exports.up = async function(knex) {
       .onDelete("cascade");
     t.foreign("challenge_id")
       .references("id")
-      .inTable("users")
+      .inTable("challenges")
       .onDelete("cascade");
   });
 };

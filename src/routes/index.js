@@ -13,10 +13,11 @@ router.use(function(req, res, next) {
 
 router.use(require("./auth"));
 router.use(require("./traits"));
+router.use(require("./dailychallenges"));
+router.use(require("./bot"));
 
 if (process.env.NODE_ENV !== "production") {
   router.use(function(req, res, next) {
-    console.log("answer")
     if (res.result) {
       logger.info("Aswering request", null, {
         result: res.result,
@@ -24,7 +25,6 @@ if (process.env.NODE_ENV !== "production") {
       });
       res.status(200).json(res.result);
     } else {
-      console.log("answer")
       res.status(200).json({ message: "OK" });
     }
   });

@@ -7,13 +7,13 @@ const DailyChallenge = require("../../models/dailyChallenge");
 const Challenge = require("../../models/challenge");
 const User = require("../../models/user");
 
-router.get("/dailyChallenges", secure, async (req, res, next) => {
-  logger.info("GET /dailyChallenges", null, {
+router.get("/bot/dailyChallenges", async (req, res, next) => {
+  logger.info("GET /bot/dailyChallenges", null, {
     reqId: httpContext.get("reqId")
   });
 
   try {
-    let dailyChallenges = await DailyChallenge.getByUserId(res.locals.user.id);
+    let dailyChallenges = await DailyChallenge.getByUserId(1);
     if (dailyChallenges && dailyChallenges.length > 0) {
       res.result = await Promise.all(
         dailyChallenges.map(ch => {
@@ -22,7 +22,7 @@ router.get("/dailyChallenges", secure, async (req, res, next) => {
       );
       return next();
     }
-    let user = await User.getById(res.locals.user.id);
+    let user = await User.getById(1);
     let date = new Date(user.last_daily);
     let now = new Date();
     if (
@@ -39,12 +39,12 @@ router.get("/dailyChallenges", secure, async (req, res, next) => {
     for (let challenge of newChalleges) {
       toDo.push(
         new DailyChallenge({
-          user_id: res.locals.user.id,
+          user_id: 1,
           challenge_id: challenge.id
         }).save()
       );
     }
-    toDo.push(User.update(res.locals.user.id, { last_daily: now }));
+    toDo.push(User.update(1, { last_daily: now }));
     await Promise.all(toDo);
     res.result = newChalleges;
     next();

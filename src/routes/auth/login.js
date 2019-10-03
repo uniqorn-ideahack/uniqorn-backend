@@ -43,6 +43,7 @@ router.post("/auth/login", async (req, res, next) => {
       next(authFail("Invalid password"));
       return;
     }
+    let updateUser = User.update(user.id, {last_login: new Date()})
     const options = {
       expiresIn: "1h"
     };
@@ -53,6 +54,7 @@ router.post("/auth/login", async (req, res, next) => {
     const token = jwt.sign(payload, jwtOptions.secretOrKey, options);
     delete user.password;
     res.result = { token: token, user: user };
+    await updateUser;
     next();
   } catch (error) {
     logger.error(error, { reqId: httpContext.get("reqId") });

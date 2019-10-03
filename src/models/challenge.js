@@ -29,6 +29,7 @@ class Challenge {
     if (isNaN(id) || id < 0) {
       throw new ValidationError("Invalid challenge ID");
     }
+    console.log(`getting ${id}`)
     const challenge = await knex("challenges")
       .select()
       .where("id", id)

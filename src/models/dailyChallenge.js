@@ -38,10 +38,11 @@ class DailyChallenge {
     if (isNaN(id) || id < 0) {
       throw new ValidationError("Invalid challenge ID");
     }
-    const num_del = await knex("daily_challenges")
+    const challenge_id = await knex("daily_challenges")
       .where("id", id)
-      .del();
-    return num_del;
+      .del()
+      .returning("challenge_id");
+    return challenge_id;
   }
 
   static async getByUserId(user_id) {
