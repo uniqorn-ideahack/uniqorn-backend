@@ -11,7 +11,9 @@ router.get("/buddies", secure, async (req, res, next) => {
   });
 
   try {
+    console.log(`getting for user ${res.locals.user.id}`)
     let buddies = await Boddy.getByUser(res.locals.user.id);
+    console.log(`found `, buddies)
     res.result = buddies;
     next();
   } catch (error) {
