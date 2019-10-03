@@ -19,7 +19,7 @@ router.post("/buddy", secure, async (req, res, next) => {
   }
   try {
     await User.getById(req.body.id)
-    res.result = await new Buddy({user_one: req.body.id, user_two: res.locals.user.id})
+    res.result = await new Buddy({user_one: req.body.id, user_two: res.locals.user.id}).save()
     next()
   } catch (error) {
     logger.error(error);
