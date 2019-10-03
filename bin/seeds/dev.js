@@ -25,36 +25,34 @@ exports.seed = async function(knex) {
         password: "$2a$11$YAgktWey7mDy02n2SFOlP.x0wEqBFR5mFdsgjwO7mXsfg2zWWnbg6"
       }
     ]);
-  await knex("buddies")
-    .insert([
-      {
-        user_one: users[0],
-        user_two: users[1]
-      },
-      {
-        user_one: users[1],
-        user_two: users[2]
-      }
-    ])
+  await knex("buddies").insert([
+    {
+      user_one: users[0],
+      user_two: users[1]
+    },
+    {
+      user_one: users[1],
+      user_two: users[2]
+    }
+  ]);
   const challenges = await knex("challenges")
     .returning("id")
     .insert([
       {
-        title: "Run for 30 mins",
+        title: "Run for 60 mins",
         description:
-          "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. ",
+          "Go exercising today to run the marathon in 4 months under 4.30. Other people in your community achieved this goal already.",
         points: 60
       },
       {
-        title: "Meditation for sleep",
+        title: "Learn spanish",
         description:
-          "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, conset vero eos et accusam et justo duo dolores et ea rebum.",
+          "Try to learn today 20 minutes Spanish, to talk in basic situations fluently in already 2 months!",
         points: 30
       },
       {
         title: "Read 30 pages",
-        description:
-          "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet",
+        description: "Sit down and concentrate on a book for a while.",
         points: 30
       }
     ]);
