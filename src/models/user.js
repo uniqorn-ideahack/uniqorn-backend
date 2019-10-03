@@ -74,7 +74,6 @@ class User {
       .where("id", userId)
       .update({last_completed_challenge_id: challengeId, last_completed_challenge_time: new Date()})
       .increment("points", points);
-    console.log("added... ", user);
     return user[0];
   }
 

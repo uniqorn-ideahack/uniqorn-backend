@@ -13,7 +13,6 @@ router.post("/dailychallenges/:id", secure, async (req, res, next) => {
   });
   try {
     let challengeId = await DailyChallenge.deleteById(req.params.id);
-    console.log(`Id ${req.params.id} got`, challengeId)
     if (!challengeId[0]) {
       // no daily challenge with this id found
       return next({
